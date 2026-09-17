@@ -1,6 +1,13 @@
-// Placeholder photos. Replace `src` with your own images (e.g. import
-// from ./src/assets and reference the import, or point at your own
-// hosted URLs) and update captions/categories to match your real work.
+// Placeholder photos, shared by Home.jsx (first 3, "Featured") and
+// Gallery.jsx (all of them, filterable by category). This is the one
+// place to edit when swapping in real photos -- both pages read from
+// this same array rather than hardcoding their own image lists.
+//
+// Each `src` points at picsum.photos, a placeholder-image service that
+// returns a random (but stable per "seed" string) photo. Replace `src`
+// with your own images (e.g. import from ./src/assets and reference the
+// import, or point at your own hosted URLs) and update
+// captions/categories to match your real work.
 const photos = [
   {
     id: 1,

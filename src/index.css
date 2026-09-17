@@ -1,17 +1,38 @@
+/* Global stylesheet -- the only .css file in the project.
+   This @import MUST be the very first line: CSS requires @import
+   statements to precede every other rule, including Tailwind's own
+   directives below. Pulls in the two Google Fonts used by
+   tailwind.config.js's fontFamily.sans (Inter) and fontFamily.display
+   (Anton). */
 @import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap");
 
+/* Tailwind's build-time directives. During the build, PostCSS replaces
+   each of these with the actual generated CSS for that layer:
+     base       -> browser resets/defaults
+     components -> reusable classes from Tailwind plugins (none used here)
+     utilities  -> every bg-, text-, flex, etc. class actually used
+                   in the project's jsx files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Makes anchor-link jumps (and the flipbook's internal scroll on mobile)
+   animate smoothly instead of snapping instantly. */
 html {
   scroll-behavior: smooth;
 }
 
+/* Bakes the site-wide background/text-color/font directly onto <body>
+   via Tailwind's @apply, so every page starts from the same look
+   without each page having to repeat these classes itself. */
 body {
   @apply bg-paper text-ink font-sans antialiased;
 }
 
+/* Plain-CSS fallback for the same stack as Tailwind's `font-display`
+   utility class. Currently unused -- every place that needs this font
+   already uses the `font-display` Tailwind class instead, so this rule
+   is redundant (kept for now, flagged in the docs for possible removal). */
 .font-display {
   font-family: "Anton", "Arial Narrow", sans-serif;
 }

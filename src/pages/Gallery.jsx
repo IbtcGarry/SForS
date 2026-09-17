@@ -1,11 +1,21 @@
 import { useMemo, useState } from "react";
 import photos from "../data/photos.js";
 
+// Built once at module load: `new Set(...)` collects each unique
+// `category` string from the data (a Set auto-dedupes), spread into an
+// array and prefixed with "All". Add a new category value in photos.js
+// and a matching filter button appears here automatically -- nothing in
+// this file needs to change.
 const categories = ["All", ...new Set(photos.map((p) => p.category))];
 
+/** Full photo grid with category filter buttons. */
 export default function Gallery() {
+  // Currently selected category filter.
   const [filter, setFilter] = useState("All");
 
+  // Recomputed only when `filter` changes (useMemo), rather than on every
+  // re-render for unrelated reasons -- a minor perf habit, not strictly
+  // necessary at this data size.
   const visible = useMemo(
     () =>
       filter === "All" ? photos : photos.filter((p) => p.category === filter),
@@ -23,6 +33,8 @@ export default function Gallery() {
         .
       </p>
 
+      {/* Filter pills -- className switches per-button based on whether
+          it matches the current `filter`. */}
       <div className="mt-8 flex flex-wrap gap-3">
         {categories.map((cat) => (
           <button

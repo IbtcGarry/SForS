@@ -1,3 +1,6 @@
+// Static layout page -- no state or logic. A responsive two-column grid
+// (single column on mobile, [1fr_1.2fr] from md: up) with a portrait on
+// the left and bio content on the right.
 export default function About() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
@@ -15,6 +18,8 @@ export default function About() {
             controlled, patient light of studio portraiture, and the fast,
             unrepeatable energy of skate and street photography.
           </p>
+          {/* Red left-border pull-quote, matching the Thrasher accent used
+              throughout the site. */}
           <blockquote className="mt-8 border-l-4 border-thrasher-red pl-4 font-display text-2xl tracking-tight text-ink">
             "Every frame is either a held breath or a caught one."
           </blockquote>

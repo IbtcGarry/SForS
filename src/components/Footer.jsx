@@ -1,9 +1,11 @@
+// Same "one array drives the list" pattern as Navbar's `links`.
 const socials = [
   { label: "Instagram", href: "https://instagram.com" },
   { label: "YouTube", href: "https://youtube.com" },
   { label: "Behance", href: "https://behance.net" },
 ];
 
+/** Site footer: logo mark, tagline, social links, copyright line. */
 export default function Footer() {
   return (
     <footer className="bg-thrasher-black text-white">
@@ -33,6 +35,7 @@ export default function Footer() {
         </ul>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs uppercase tracking-widest text-white/40">
+        {/* Computed at render time, so this never needs a manual update. */}
         © {new Date().getFullYear()} SForS Photography. All rights reserved.
       </div>
     </footer>

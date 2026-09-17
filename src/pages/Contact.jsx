@@ -1,9 +1,16 @@
 import { useState } from "react";
 
+/**
+ * Contact form. NOTE: this is front-end only -- `handleSubmit` never
+ * calls a server. Wire it up to a real email service/API before relying
+ * on it to actually deliver messages.
+ */
 export default function Contact() {
+  // Whether the form has been "submitted" (client-side only).
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
+    // Stops the browser's default full-page-reload form submission.
     e.preventDefault();
     setSubmitted(true);
   };
@@ -15,6 +22,8 @@ export default function Contact() {
         Bookings, prints, or just to talk shop — reach out below.
       </p>
 
+      {/* Conditionally render either the form or a thank-you message
+          based on `submitted`. */}
       {submitted ? (
         <div className="mt-10 border border-thrasher-red/30 bg-thrasher-red/5 px-6 py-8 text-ink">
           Thanks — this is a placeholder confirmation. Wire this form up to

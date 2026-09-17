@@ -2,7 +2,15 @@ import { useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import BookPage from "../components/BookPage.jsx";
 
+// Single source of truth for how many pages the book has. Change this
+// and the page-generation loop below automatically produces more/fewer
+// EntryPage instances (page 1 always renders as the cover, the last
+// page always renders as the closing page -- see the .map() below).
 const TOTAL_PAGES = 10;
+
+// --- Page components -----------------------------------------------
+// Each one renders a <BookPage> (see BookPage.jsx for why that wrapper
+// is required) styled differently depending on its role in the book.
 
 function CoverPage({ pageNumber }) {
   return (
@@ -77,8 +85,20 @@ function EntryPage({ pageNumber }) {
   );
 }
 
+/** The "Progress" tab: a 10-page interactive flipbook. */
 export default function Progress() {
+  // Ref to the <HTMLFlipBook> instance. react-pageflip exposes one
+  // method on this ref, `pageFlip()`, which returns the underlying
+  // page-flip animation-engine instance -- THAT object has the real
+  // control methods (flipNext, flipPrev, flip(pageIndex), ...). This is
+  // why the buttons below call bookRef.current?.pageFlip()?.flipNext()
+  // rather than something simpler: it's two layers of indirection
+  // (React ref -> pageFlip() -> the animation engine), and `?.`
+  // (optional chaining) guards against calling it before the ref is
+  // attached.
   const bookRef = useRef(null);
+
+  // Current page index (0-based) for the "Page X of 10" counter.
   const [page, setPage] = useState(0);
 
   const goPrev = () => bookRef.current?.pageFlip()?.flipPrev();
@@ -97,17 +117,29 @@ export default function Progress() {
           ref={bookRef}
           width={340}
           height={480}
+          // "stretch" + the min/max bounds below let the book resize
+          // responsively instead of staying a fixed pixel size.
           size="stretch"
           minWidth={280}
           maxWidth={480}
           minHeight={400}
           maxHeight={680}
           maxShadowOpacity={0.4}
+          // false = page 1 renders as a normal page, not a special
+          // single-page "hard cover". The cover *look* here comes
+          // entirely from CoverPage's own styling, not a library feature.
           showCover={false}
+          // Stops touch-scroll gestures on mobile from being hijacked by
+          // the page-flip drag gesture.
           mobileScrollSupport={true}
           className="mx-auto shadow-2xl"
+          // Called by the library after every flip completes; e.data is
+          // the new page index (0-based) it hands back.
           onFlip={(e) => setPage(e.data)}
         >
+          {/* Builds [1, 2, ..., TOTAL_PAGES] then maps each number to a
+              page component: page 1 -> cover, last page -> closing,
+              everything else -> a content entry. */}
           {Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).map((n) => {
             if (n === 1) return <CoverPage key={n} pageNumber={n} />;
             if (n === TOTAL_PAGES)
@@ -117,6 +149,10 @@ export default function Progress() {
         </HTMLFlipBook>
       </div>
 
+      {/* Explicit Prev/Next buttons alongside the library's own built-in
+          click/drag-on-page-edge behavior -- clicking a tiny page corner
+          isn't obvious or keyboard-friendly, so these exist for
+          discoverability and accessibility. */}
       <div className="mt-8 flex items-center gap-6">
         <button
           type="button"
